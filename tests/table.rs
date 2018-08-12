@@ -7,9 +7,10 @@ include!("normalize_html.rs.inc");
 
 
     #[test]
-    fn spec_test_1() {
+    fn table_test_1() {
         let original = r##"Test header
------------"##;
+-----------
+"##;
         let expected = r##"<h2>Test header</h2>
 "##;
 
@@ -22,15 +23,16 @@ include!("normalize_html.rs.inc");
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_2() {
+    fn table_test_2() {
         let original = r##"Test|Table
-----|-----"##;
+----|-----
+"##;
         let expected = r##"<table><thead><tr><td>Test</td><td>Table</td></tr></thead>
 </table>
 "##;
@@ -44,19 +46,20 @@ include!("normalize_html.rs.inc");
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_3() {
+    fn table_test_3() {
         let original = r##"Test|Table
 ----|-----
 Test row
 Test|2
 
-Test ending"##;
+Test ending
+"##;
         let expected = r##"<table><thead><tr><td>Test</td><td>Table</td></tr></thead>
 <tr><td>Test row</td></tr>
 <tr><td>Test</td><td>2</td></tr>
@@ -73,19 +76,20 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_4() {
+    fn table_test_4() {
         let original = r##"> Test  | Table
 > ------|------
 > Row 1 | Every
 > Row 2 | Day
 >
-> Paragraph"##;
+> Paragraph
+"##;
         let expected = r##"<blockquote>
 <table><thead><tr><td>Test  </td><td> Table</td></tr></thead>
 <tr><td>Row 1 </td><td> Every</td></tr>
@@ -104,20 +108,21 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_5() {
+    fn table_test_5() {
         let original = r##" 1. First entry
  2. Second entry
 
     Col 1|Col 2
     -|-
     Row 1|Part 2
-    Row 2|Part 2"##;
+    Row 2|Part 2
+"##;
         let expected = r##"<ol>
 <li>
 <p>First entry</p>
@@ -141,17 +146,18 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_6() {
+    fn table_test_6() {
         let original = r##"|Col 1|Col 2|
 |-----|-----|
 |R1C1 |R1C2 |
-|R2C1 |R2C2 |"##;
+|R2C1 |R2C2 |
+"##;
         let expected = r##"<table><thead><tr><td>Col 1</td><td>Col 2</td></tr></thead>
 <tr><td>R1C1 </td><td>R1C2 </td></tr>
 <tr><td>R2C1 </td><td>R2C2 </td></tr>
@@ -167,17 +173,18 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_7() {
+    fn table_test_7() {
         let original = r##"| Col 1 | Col 2 |
 |-------|-------|
 |       |       |
-|       |       |"##;
+|       |       |
+"##;
         let expected = r##"<table><thead><tr><td> Col 1 </td><td> Col 2 </td></tr></thead>
 <tr><td>       </td><td>       </td></tr>
 <tr><td>       </td><td>       </td></tr>
@@ -193,17 +200,18 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_8() {
+    fn table_test_8() {
         let original = r##"| Col 1 | Col 2 |
 |-------|-------|
 |   x   |       |
-|       |    x  |"##;
+|       |    x  |
+"##;
         let expected = r##"<table><thead><tr><td> Col 1 </td><td> Col 2 </td></tr></thead>
 <tr><td>   x   </td><td>       </td></tr>
 <tr><td>       </td><td>    x  </td></tr>
@@ -219,17 +227,18 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_9() {
+    fn table_test_9() {
         let original = r##"|Col 1|Col 2|
 |-----|-----|
 |✓    |✓    |
-|✓    |✓    |"##;
+|✓    |✓    |
+"##;
         let expected = r##"<table><thead><tr><td>Col 1</td><td>Col 2</td></tr></thead>
 <tr><td>✓    </td><td>✓    </td></tr>
 <tr><td>✓    </td><td>✓    </td></tr>
@@ -245,13 +254,13 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_10() {
+    fn table_test_10() {
         let original = r##"|  Target                       | std |rustc|cargo| notes                      |
 |-------------------------------|-----|-----|-----|----------------------------|
 | `x86_64-unknown-linux-musl`   |  ✓  |     |     | 64-bit Linux with MUSL     |
@@ -260,7 +269,8 @@ Test ending"##;
 | `arm-unknown-linux-gnueabihf` |  ✓  |  ✓  |     | ARM Linux (2.6.18+)        |
 | `aarch64-unknown-linux-gnu`   |  ✓  |     |     | ARM64 Linux (2.6.18+)      |
 | `mips-unknown-linux-gnu`      |  ✓  |     |     | MIPS Linux (2.6.18+)       |
-| `mipsel-unknown-linux-gnu`    |  ✓  |     |     | MIPS (LE) Linux (2.6.18+)  |"##;
+| `mipsel-unknown-linux-gnu`    |  ✓  |     |     | MIPS (LE) Linux (2.6.18+)  |
+"##;
         let expected = r##"<table><thead><tr><td>  Target                       </td><td> std </td><td>rustc</td><td>cargo</td><td> notes                      </td></tr></thead>
 <tr><td> <code>x86_64-unknown-linux-musl</code>   </td><td>  ✓  </td><td>     </td><td>     </td><td> 64-bit Linux with MUSL     </td></tr>
 <tr><td> <code>arm-linux-androideabi</code>       </td><td>  ✓  </td><td>     </td><td>     </td><td> ARM Android                </td></tr>
@@ -281,15 +291,16 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_11() {
+    fn table_test_11() {
         let original = r##"|-|-|
-|ぃ|い|"##;
+|ぃ|い|
+"##;
         let expected = r##"<p>|-|-|
 |ぃ|い|</p>
 "##;
@@ -303,16 +314,17 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_12() {
+    fn table_test_12() {
         let original = r##"|ぁ|ぃ|
 |-|-|
-|ぃ|ぃ|"##;
+|ぃ|ぃ|
+"##;
         let expected = r##"<table><thead><tr><td>ぁ</td><td>ぃ</td></tr></thead>
 <tr><td>ぃ</td><td>ぃ</td></tr>
 </table>
@@ -327,16 +339,17 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }
 
     #[test]
-    fn spec_test_13() {
+    fn table_test_13() {
         let original = r##"|Колонка 1|Колонка 2|
 |---------|---------|
-|Ячейка 1 |Ячейка 2 |"##;
+|Ячейка 1 |Ячейка 2 |
+"##;
         let expected = r##"<table><thead><tr><td>Колонка 1</td><td>Колонка 2</td></tr></thead>
 <tr><td>Ячейка 1 </td><td>Ячейка 2 </td></tr>
 </table>
@@ -351,7 +364,7 @@ Test ending"##;
         opts.insert(OPTION_ENABLE_FOOTNOTES);
 
         let p = Parser::new_ext(&original, opts);
-        html::push_html(&mut s, p);
+        html::push_html(&mut s, p).unwrap();
 
         assert_eq!(normalize_html(&expected), normalize_html(&s));
     }

@@ -1,6 +1,6 @@
 [package]
 name = "pulldown-cmark"
-version = "0.0.8"
+version = "0.1.2"
 authors = [ "Raph Levien <raph@google.com>" ]
 license = "MIT"
 description = "A pull parser for CommonMark"
@@ -11,11 +11,12 @@ build = "build.rs"
 
 [[bin]]
 name = "pulldown-cmark"
+required-features = ["getopts"]
 doc = false
 
 [dependencies]
-bitflags = "0.7"
-getopts = "0.2"
+bitflags = "0.9"
+getopts = { version = "0.2", optional = true }
 
 [dev-dependencies]
 html5ever = "0.20"
@@ -24,5 +25,5 @@ regex = "0.2"
 tendril = "0.4"
 
 [features]
-default = []
+default = ["getopts"]
 gen-tests = []
